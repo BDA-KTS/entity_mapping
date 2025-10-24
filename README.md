@@ -42,7 +42,7 @@ The method runs on a small virtual machine provided by a cloud computing company
 
 Install dependencies, using
 
-`pip install -r requirements.txt`
+`conda env create -f environment.yml`
 
 ## How to Use
 

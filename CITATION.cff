@@ -11,9 +11,6 @@ authors:
   - given-names: Stephan
     family-names: Linzbach
     orcid: 'https://orcid.org/0009-0009-6955-2368'
-  - given-names: Taimoor
-    family-names: Khan
-    orcid: '0000-0002-6542-9217'
 abstract: >-
   The entity mapping method helps in hashing entities with sensitive information to address privacy concerns in data offers. It can be used to hash URLs and their PLDs, hashtags, mentions and other types of entities. 
 license: Apache-2.0

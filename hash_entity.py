@@ -9,8 +9,6 @@ entity_regex = {
 'url' : r'(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})',       # urls
 'Mentions': r'(?<!\w)@[\w.\-]+(?:@[\w\.\-]+\.\w+)?',                                           # including both normal and mastodon mentions
 'Hashtags': r'#\w+',                                                                           # hashtags
-'All_caps': r'\b(?:[A-Z]{2,})\b',                                                              # All caps words
-'Emojis': r'[\U00010000-\U0010ffff]',                                                          # Basic Unicode emoji range   
 # add other regex 
 }
 def hash_entity(input_data, entity_type = "url"):

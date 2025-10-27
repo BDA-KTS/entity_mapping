@@ -27,11 +27,20 @@ def parse_args():
         default="./data/input_data.txt",
         help="Path to the input file or directory."
     )
+
     parser.add_argument(
         "--regex_dict", "-r",
         type=str,
         help="Path to JSON file containing regex dictionary."
     )
+
+    parser.add_argument(
+        "--entity_types", "-et",
+        type=str,
+        default="url",
+        help="List of entity types to anonymize separated by comma."
+    )
+
     parser.add_argument(
         "--hash_func", "-hf",
         type=str,
@@ -97,36 +106,37 @@ def select_hash_func(hash_name: str):
 
 def hash_entity(input_data, 
                 entity_regex, 
-                entity_type = "url", 
+                entities_to_anonymize = ["url"], 
                 hash_fn=hashlib.md5,
                 salt=None):
 
-    if entity_type == "url":
-        regex = entity_regex[entity_type]
+    rel_regex = {k: v for k, v in entity_regex.items() if k in entities_to_anonymize}
 
     hashed_entities = []
     input_with_hashed_entities = []
     for post in input_data:
-        _matched_entities = re.findall(regex,  post)
+        _matched_entities = {entity_type: re.findall(regex,  post) \
+                                for entity_type, regex in rel_regex.items()}
         
-        for entity in _matched_entities:
-            if entity_type == "url":
-                entity_f = entity[:40]
-                if salt:
-                    entity_f += salt
-                try:
-                    entity_e = urlsplit(entity_f).netloc
-                except:
-                    entity_e = 'unknown'
-                net_loc = hash_fn(entity_e.encode()).hexdigest()
-                res = hash_fn(entity.encode()).hexdigest()
-                input_with_hashed_entities.append(post.replace(entity, "<hashed_entity><url_hash>"+ res +"</url_hash>" + "<pld_hash>"+ net_loc + "</pld_hash></hashed_entity>"))
-                hashed_entities.append("res:" + res + "\tnet_loc" + net_loc)  
-            # for other entities (non URL)
-            else:
-                hash_entity = hash_fn(entity.encode()).hexdigest()
-                input_with_hashed_entities.append(post.replace(entity, "<hashed_entity>" + hash_entity + "</hashed_entity>"))
-                hashed_entities.append(hash_entity)  
+        for entity_type, matches in _matched_entities.items():
+            for entity in matches:
+                if entity_type == "url":
+                    entity_f = entity[:40]
+                    if salt:
+                        entity_f += salt
+                    try:
+                        entity_e = urlsplit(entity_f).netloc
+                    except:
+                        entity_e = 'unknown'
+                    net_loc = hash_fn(entity_e.encode()).hexdigest()
+                    res = hash_fn(entity.encode()).hexdigest()
+                    input_with_hashed_entities.append(post.replace(entity, "<hashed_{entity_type}><url_hash>"+ res +"</url_hash>" + "<pld_hash>"+ net_loc + "</pld_hash></hashed_{entity_type}>"))
+                    hashed_entities.append("res:" + res + "\tnet_loc" + net_loc)  
+                # for other entities (non URL)
+                else:
+                    hash_entity = hash_fn(entity.encode()).hexdigest()
+                    input_with_hashed_entities.append(post.replace(entity, f"<hashed_{entity_type}>{hash_entity}</hashed_{entity_type}>"))
+                    hashed_entities.append(hash_entity)  
     df = pd.DataFrame({'hashed_posts': input_with_hashed_entities, 'hashed_entities': hashed_entities})
     return df          
     
@@ -161,7 +171,7 @@ if __name__ == "__main__":
     df = hash_entity(input_data=posts, 
                      entity_regex=args.regex_dict, 
                      hash_fn=hash_fn, 
-                     entity_type="url",
+                     entities_to_anonymize=args.entity_types.split(","),
                      salt=timestamp if args.salt else None)
     output_path = f"{args.output}/data/"
     ensure_dir(output_path)

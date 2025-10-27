@@ -2,16 +2,104 @@ import hashlib
 import json
 import re
 from urllib.parse import urlsplit
+from datetime import datetime
 from glob import glob
 import pandas as pd
 
-entity_regex = {
-'url' : r'(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})',       # urls
-'Mentions': r'(?<!\w)@[\w.\-]+(?:@[\w\.\-]+\.\w+)?',                                           # including both normal and mastodon mentions
-'Hashtags': r'#\w+',                                                                           # hashtags
-# add other regex 
-}
-def hash_entity(input_data, entity_type = "url"):
+import argparse
+import json
+import os
+import hashlib
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Process input files with regex transformations and hashing.")
+    entity_regex = {
+    'url' : r'(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})',       # urls
+    'Mentions': r'(?<!\w)@[\w.\-]+(?:@[\w\.\-]+\.\w+)?',                                           # including both normal and mastodon mentions
+    'Hashtags': r'#\w+',                                                                           # hashtags
+    # add other regex 
+    }
+
+    # Required arguments
+    parser.add_argument(
+        "--input_data", "-i",
+        type=str,
+        default="./data/input_data.txt",
+        help="Path to the input file or directory."
+    )
+    parser.add_argument(
+        "--regex_dict", "-r",
+        type=str,
+        help="Path to JSON file containing regex dictionary."
+    )
+    parser.add_argument(
+        "--hash_func", "-hf",
+        type=str,
+        choices=["md5", "sha256"],
+        default="md5",
+        help="Hash function to use (e.g., sha256, md5)."
+    )
+
+    # Optional arguments
+    parser.add_argument(
+        "--salt", "-s",
+        action="store_true",
+        help="Whether to salt the hashes."
+    )
+
+    parser.add_argument(
+        "--output", "-o",
+        type=str,
+        default="./output",
+        help="Directory to save output files (default: ./output)."
+    )
+
+    args = parser.parse_args()
+
+    # Load regex dictionary
+    if not args.regex_dict:
+        args.regex_dict = entity_regex
+    else:
+        with open(args.regex_dict, 'r') as f:
+            args.regex_dict = json.load(f)
+
+    # Ensure output directory exists
+    os.makedirs(args.output, exist_ok=True)
+
+    return args
+
+def ensure_dir(path):
+    """Create the directory if it doesn't exist."""
+    if not os.path.exists(path):
+        os.makedirs(path, exist_ok=True)
+
+
+def select_hash_func(hash_name: str):
+    """
+    Maps a string to a hashlib hash function constructor.
+
+    Args:
+        hash_name (str): Name of the hash function (e.g., "sha256", "md5").
+
+    Returns:
+        Callable: Hash constructor from hashlib (e.g., hashlib.sha256)
+
+    Raises:
+        ValueError: If the hash function name is not supported.
+    """
+    hash_name = hash_name.lower()  # Normalize input
+    if hash_name in hashlib.algorithms_guaranteed:
+        return getattr(hashlib, hash_name)
+    else:
+        raise ValueError(f"Unsupported hash function '{hash_name}'. "
+                         f"Supported algorithms: {', '.join(sorted(hashlib.algorithms_guaranteed))}")
+
+
+def hash_entity(input_data, 
+                entity_regex, 
+                entity_type = "url", 
+                hash_fn=hashlib.md5,
+                salt=None):
 
     if entity_type == "url":
         regex = entity_regex[entity_type]
@@ -24,24 +112,57 @@ def hash_entity(input_data, entity_type = "url"):
         for entity in _matched_entities:
             if entity_type == "url":
                 entity_f = entity[:40]
+                if salt:
+                    entity_f += salt
                 try:
                     entity_e = urlsplit(entity_f).netloc
                 except:
-                    entity_e = 'unkown'
-                net_loc = hashlib.md5(entity_e.encode()).hexdigest()
-                res = hashlib.md5(entity.encode()).hexdigest()
+                    entity_e = 'unknown'
+                net_loc = hash_fn(entity_e.encode()).hexdigest()
+                res = hash_fn(entity.encode()).hexdigest()
                 input_with_hashed_entities.append(post.replace(entity, "<hashed_entity><url_hash>"+ res +"</url_hash>" + "<pld_hash>"+ net_loc + "</pld_hash></hashed_entity>"))
                 hashed_entities.append("res:" + res + "\tnet_loc" + net_loc)  
             # for other entities (non URL)
             else:
-                hash_entity = hashlib.md5(entity.encode()).hexdigest()
+                hash_entity = hash_fn(entity.encode()).hexdigest()
                 input_with_hashed_entities.append(post.replace(entity, "<hashed_entity>" + hash_entity + "</hashed_entity>"))
                 hashed_entities.append(hash_entity)  
     df = pd.DataFrame({'hashed_posts': input_with_hashed_entities, 'hashed_entities': hashed_entities})
     return df          
     
+
+def save_config(args):
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    config_path = f"{args.output}/config/"
+    ensure_dir(config_path)
+    config_path += f"config_{timestamp}.json"
+    # Convert args namespace to dict, excluding non-serializable objects
+    args_dict = vars(args).copy()
+    # regex_dict is already loaded as dict, keep as is
+
+    with open(config_path, "w") as f:
+        json.dump(args_dict, f, indent=4)
+
+    print(f"Configuration saved to {config_path}")
+    return timestamp
+
 if __name__ == "__main__":
+    args = parse_args()
+    print("Parsed arguments:")
+    print(args)
+    timestamp = save_config(args)
+
     with open("data/input_data.txt", "r", encoding="utf-8") as file:
         posts = file.read().split('\n')
-    df = hash_entity(posts, "url")
-    df.to_csv("data/output_data.tsv", sep = "\t", encoding = "utf-8")
+
+    hash_fn = select_hash_func(args.hash_func)
+
+    df = hash_entity(input_data=posts, 
+                     entity_regex=args.regex_dict, 
+                     hash_fn=hash_fn, 
+                     entity_type="url",
+                     salt=timestamp if args.salt else None)
+    output_path = f"{args.output}/data/"
+    ensure_dir(output_path)
+    df.to_csv(f"{output_path}/output_data_{timestamp}.tsv", sep = "\t", encoding = "utf-8")

@@ -8,8 +8,8 @@ MD5 is an algorithm that can map any input to an unique irreversible hash-value.
 This makes MD5 a desirable tool for anonymization, while also preserving referential integrity i.e., the same entity will always map to the same hash. 
 
 This method will scan the input data for predefined entity patterns.
-After recognition it will add random 'salt' to each pattern.
-This increases the security of the anonymization.
+After recognition it can add the current timestamp as 'salt' to each pattern.
+Adding 'salt' increases the security of the anonymization against available lookup tables.
 Lastly, it will transform all recognized and 'salted' patterns with the MD5 algorithm, and it will replace them in the text with the corresponding hash-value.
 This approach allows researchers to maintain the semantic and relational structure of the data (e.g., user mentions, domain references, or recurring tags) without exposing sensitive or personally identifiable information. 
 Such a hashing-based mapping mechanism is particularly useful in privacy-preserving computational social science studies.

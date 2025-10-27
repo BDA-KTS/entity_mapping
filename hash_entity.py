@@ -15,6 +15,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Process input files with regex transformations and hashing.")
     entity_regex = {
     'url' : r'(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})',       # urls
+    'IBAN' : r'\b[A-Z]{2}[0-9]{2}(?:[ ]?[0-9]{4}){4}(?!(?:[ ]?[0-9]){3})(?:[ ]?[0-9]{1,2})?\b',
     'Mentions': r'(?<!\w)@[\w.\-]+(?:@[\w\.\-]+\.\w+)?',                                           # including both normal and mastodon mentions
     'Hashtags': r'#\w+',                                                                           # hashtags
     # add other regex 
@@ -44,9 +45,8 @@ def parse_args():
     parser.add_argument(
         "--hash_func", "-hf",
         type=str,
-        choices=["md5", "sha256"],
         default="md5",
-        help="Hash function to use (e.g., sha256, md5)."
+        help="Hash function to use (e.g., sha256, md5) defaults to md5."
     )
 
     # Optional arguments
@@ -119,7 +119,7 @@ def hash_entity(input_data,
                     net_loc = hash_fn(entity_e.encode()).hexdigest()
                     res = hash_fn(entity.encode()).hexdigest()
                     input_with_hashed_entities.append(post.replace(entity, "<hashed_{entity_type}><url_hash>"+ res +"</url_hash>" + "<pld_hash>"+ net_loc + "</pld_hash></hashed_{entity_type}>"))
-                    hashed_entities.append("res:" + res + "\tnet_loc:" + net_loc)  
+                    hashed_entities.append("url:" + res + "\tdomain:" + net_loc)  
                 # for other entities (non URL)
                 else:
                     hash_entity = hash_fn(entity.encode()).hexdigest()

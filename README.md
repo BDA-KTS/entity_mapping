@@ -39,12 +39,12 @@ The output data is written into [data/output_data.tsv](data/output_data.tsv) whe
 
 | hashed_posts	| hashed_entities |
 |:-------------:|:---------------:|
-| Just discovered the best coffee spot in town ☕ Check it out → <hashed_url><url_hash>f3442bcf31cfdd30065901ff60d5927a</url_hash><pld_hash>5ababd603b22780302dd8d83498e5172</pld_hash></hashed_url>	| res:f3442bcf31cfdd30065901ff60d5927a net_loc5ababd603b22780302dd8d83498e5172 |
-|	When life gets blurry, adjust your focus 📸 <hashed_url><url_hash>77b3526cf5c25974e176acf187ad6734</url_hash><pld_hash>5ababd603b22780302dd8d83498e5172</pld_hash></hashed_url>	| res:77b3526cf5c25974e176acf187ad6734 net_loc5ababd603b22780302dd8d83498e5172 |
-|	Can’t believe it’s already Friday again 😅 <hashed_url><url_hash>0c235f77f6aa8ce10e838742faa5373e</url_hash><pld_hash>5ababd603b22780302dd8d83498e5172</pld_hash></hashed_url>	| res:0c235f77f6aa8ce10e838742faa5373e net_loc5ababd603b22780302dd8d83498e5172 |
-|	AI is cool until it starts correcting your jokes 😂 <hashed_url><url_hash>ca3dbccf917c0ecf35ce4b821e2a1789</url_hash><pld_hash>5ababd603b22780302dd8d83498e5172</pld_hash></hashed_url>	| res:ca3dbccf917c0ecf35ce4b821e2a1789 net_loc5ababd603b22780302dd8d83498e5172 |
-|	That moment when your code finally runs without errors 🎉 <hashed_url><url_hash>b77144869e3b53ce256778068d32e0a4</url_hash><pld_hash>5ababd603b22780302dd8d83498e5172</pld_hash></hashed_url>	| res:b77144869e3b53ce256778068d32e0a4 net_loc5ababd603b22780302dd8d83498e5172 |
-|	Long walks + good music = therapy 🚶‍♂️🎶 <hashed_url><url_hash>e66e778b0173f1c232aebcf9fa3898c1</url_hash><pld_hash>5ababd603b22780302dd8d83498e5172</pld_hash></hashed_url>	| res:e66e778b0173f1c232aebcf9fa3898c1 net_loc5ababd603b22780302dd8d83498e5172 |
+| Just discovered the best coffee spot in town ☕ Check it out → <hashed_url><url_hash>f3442bcf31cfdd30065901ff60d5927a</url_hash><pld_hash>5ababd603b22780302dd8d83498e5172</pld_hash></hashed_url>	| url:f3442bcf31cfdd30065901ff60d5927a domain:5ababd603b22780302dd8d83498e5172 |
+|	When life gets blurry, adjust your focus 📸 <hashed_url><url_hash>77b3526cf5c25974e176acf187ad6734</url_hash><pld_hash>5ababd603b22780302dd8d83498e5172</pld_hash></hashed_url>	| url:77b3526cf5c25974e176acf187ad6734 domain:5ababd603b22780302dd8d83498e5172 |
+|	Can’t believe it’s already Friday again 😅 <hashed_url><url_hash>0c235f77f6aa8ce10e838742faa5373e</url_hash><pld_hash>5ababd603b22780302dd8d83498e5172</pld_hash></hashed_url>	| url:0c235f77f6aa8ce10e838742faa5373e domain:5ababd603b22780302dd8d83498e5172 |
+|	AI is cool until it starts correcting your jokes 😂 <hashed_url><url_hash>ca3dbccf917c0ecf35ce4b821e2a1789</url_hash><pld_hash>5ababd603b22780302dd8d83498e5172</pld_hash></hashed_url>	| url:ca3dbccf917c0ecf35ce4b821e2a1789 domain:5ababd603b22780302dd8d83498e5172 |
+|	That moment when your code finally runs without errors 🎉 <hashed_url><url_hash>b77144869e3b53ce256778068d32e0a4</url_hash><pld_hash>5ababd603b22780302dd8d83498e5172</pld_hash></hashed_url>	| url:b77144869e3b53ce256778068d32e0a4 domain:5ababd603b22780302dd8d83498e5172 |
+|	Long walks + good music = therapy 🚶‍♂️🎶 <hashed_url><url_hash>e66e778b0173f1c232aebcf9fa3898c1</url_hash><pld_hash>5ababd603b22780302dd8d83498e5172</pld_hash></hashed_url>	| url:e66e778b0173f1c232aebcf9fa3898c1 domain:5ababd603b22780302dd8d83498e5172 |
 
 ## Hardware Requirements
 

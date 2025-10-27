@@ -1,8 +1,8 @@
 # Entity Mapping
 
 ## Description
-The entity mapping method anonymizes identified patterns relevant for privacy like urls, usernames etc.
-The method uses Regular Expressions (regex) to recognize patterns such as URLs, hashtags, mentions, and more. 
+The entity mapping method anonymizes privacy relevant information found in texts.
+For this the method uses Regular Expressions (RegEx) that match patterns such as URLs, hashtags, IBANs, and more. 
 Each recognized pattern is hashed via the MD5 algorithm.
 MD5 is an algorithm that can map any input to an unique irreversible hash-value.
 This makes MD5 a desirable tool for anonymization, while also preserving referential integrity i.e., the same entity will always map to the same hash. 

@@ -1,15 +1,15 @@
-import hashlib
-import json
+import os
 import re
-from urllib.parse import urlsplit
-from datetime import datetime
-from glob import glob
+import json
+import hashlib
+import argparse
 import pandas as pd
 
-import argparse
-import json
-import os
-import hashlib
+from glob import glob
+from datetime import datetime
+from urllib.parse import urlsplit
+
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Process input files with regex transformations and hashing.")
@@ -77,25 +77,13 @@ def parse_args():
 
     return args
 
+
 def ensure_dir(path):
-    """Create the directory if it doesn't exist."""
     if not os.path.exists(path):
         os.makedirs(path, exist_ok=True)
 
 
 def select_hash_func(hash_name: str):
-    """
-    Maps a string to a hashlib hash function constructor.
-
-    Args:
-        hash_name (str): Name of the hash function (e.g., "sha256", "md5").
-
-    Returns:
-        Callable: Hash constructor from hashlib (e.g., hashlib.sha256)
-
-    Raises:
-        ValueError: If the hash function name is not supported.
-    """
     hash_name = hash_name.lower()  # Normalize input
     if hash_name in hashlib.algorithms_guaranteed:
         return getattr(hashlib, hash_name)
@@ -131,7 +119,7 @@ def hash_entity(input_data,
                     net_loc = hash_fn(entity_e.encode()).hexdigest()
                     res = hash_fn(entity.encode()).hexdigest()
                     input_with_hashed_entities.append(post.replace(entity, "<hashed_{entity_type}><url_hash>"+ res +"</url_hash>" + "<pld_hash>"+ net_loc + "</pld_hash></hashed_{entity_type}>"))
-                    hashed_entities.append("res:" + res + "\tnet_loc" + net_loc)  
+                    hashed_entities.append("res:" + res + "\tnet_loc:" + net_loc)  
                 # for other entities (non URL)
                 else:
                     hash_entity = hash_fn(entity.encode()).hexdigest()
@@ -139,7 +127,7 @@ def hash_entity(input_data,
                     hashed_entities.append(hash_entity)  
     df = pd.DataFrame({'hashed_posts': input_with_hashed_entities, 'hashed_entities': hashed_entities})
     return df          
-    
+
 
 def save_config(args):
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -156,6 +144,7 @@ def save_config(args):
 
     print(f"Configuration saved to {config_path}")
     return timestamp
+
 
 if __name__ == "__main__":
     args = parse_args()

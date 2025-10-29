@@ -60,15 +60,6 @@ Install dependencies, using
 
 The method offers a CLI-tool that makes it easy to run and adapt the code to your current needs.
 
-| Argument &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;    &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;   | Short | Type   | Default                 | Description                                                                                                            |
-| ------------------ | ----- | ------ | ----------------------- | -------------------------------------------------------------------------- |
-| `--input_data`     | `-i`  | `str`  | `./data/input_data.txt` | Path to input file or directory to process.                                                                            |
-| `--regex_dict`     | `-r`  | `str`  | `None`                  | Path to a JSON file containing custom regex patterns. If not provided, defaults to built-in `entity_regex` dictionary. |
-| `--entity_types`   | `-et` | `str`  | `"url"`                 | Comma-separated list of entity types to anonymize (e.g. `IBAN,Hashtags`).                                          |
-| `--hash_func`      | `-hf` | `str`  | `"md5"`                 | Hashing algorithm to use (`md5`, `sha256`, etc.).                                                                      |
-| `--salt`           | `-s`  | `flag` | `False`                 | If provided, enables salting of hashes for extra security.                                                             |
-| `--output`         | `-o`  | `str`  | `./output`              | Directory path for saving processed output files.                                                                      |
-
 ### Example Commands
 
 #### 1) Anonymize url and Hashtags in tweets.txt file
@@ -85,6 +76,16 @@ python hash_entity.py -i ./data/posts.txt -r ./config/custom_regex.json -et Ment
 ```
 python hash_entity.py -i ./data/sample.txt -hf sha256 -s -o ./cleaned_output
 ```
+
+### Parameter Overview
+| Argument &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;    &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;   | Short | Type   | Default                 | Description                                                                                                            |
+| ------------------ | ----- | ------ | ----------------------- | -------------------------------------------------------------------------- |
+| `--input_data`     | `-i`  | `str`  | `./data/input_data.txt` | Path to input file or directory to process.                                                                            |
+| `--regex_dict`     | `-r`  | `str`  | `None`                  | Path to a JSON file containing custom regex patterns. If not provided, defaults to built-in `entity_regex` dictionary. |
+| `--entity_types`   | `-et` | `str`  | `"url"`                 | Comma-separated list of entity types to anonymize (e.g. `IBAN,Hashtags`).                                          |
+| `--hash_func`      | `-hf` | `str`  | `"md5"`                 | Hashing algorithm to use (`md5`, `sha256`, etc.).                                                                      |
+| `--salt`           | `-s`  | `flag` | `False`                 | If provided, enables salting of hashes for extra security.                                                             |
+| `--output`         | `-o`  | `str`  | `./output`              | Directory path for saving processed output files.                                                                      |
 
 ## Contact
 

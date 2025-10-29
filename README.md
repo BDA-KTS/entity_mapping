@@ -60,7 +60,7 @@ Install dependencies, using
 
 The method offers a CLI-tool that makes it easy to run and adapt the code to your current needs.
 
-| Argument &nbsp;          | Short | Type   | Default                 | Description                                                                                                            |
+| Argument &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;  &nbsp;     | Short | Type   | Default                 | Description                                                                                                            |
 | ------------------ | ----- | ------ | ----------------------- | -------------------------------------------------------------------------- |
 | `--input_data`     | `-i`  | `str`  | `./data/input_data.txt` | Path to input file or directory to process.                                                                            |
 | `--regex_dict`     | `-r`  | `str`  | `None`                  | Path to a JSON file containing custom regex patterns. If not provided, defaults to built-in `entity_regex` dictionary. |

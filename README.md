@@ -64,23 +64,28 @@ The method offers a CLI-tool that makes it easy to run and adapt the code to you
 | Argument         | Short | Type   | Default                 | Description                                                                                                            |
 | ---------------- | ----- | ------ | ----------------------- | ---------------------------------------------------------------------------------------------------------------------- |
 | `--input_data`   | `-i`  | `str`  | `./data/input_data.txt` | Path to input file or directory to process.                                                                            |
-| `--regex_dict`   | `-r`  | `str`  | `None`                  | Path to a JSON file containing custom regex patterns. If not provided, defaults to built-in `entity_regex` dictionary. |
-| `--entity_types` | `-et` | `str`  | `"url"`                 | Comma-separated list of entity types to anonymize (e.g. `url,IBAN,Hashtags`).                                          |
+| `--regex_dict`   | `-r`  | `str`  | `None`                  | Path to a JSON file containing custom regex patterns. \\ If not provided, defaults to built-in `entity_regex` dictionary. |
+| `--entity_types` | `-et` | `str`  | `"url"`                 | Comma-separated list of entity types to anonymize (e.g. `IBAN,Hashtags`).                                          |
 | `--hash_func`    | `-hf` | `str`  | `"md5"`                 | Hashing algorithm to use (`md5`, `sha256`, etc.).                                                                      |
 | `--salt`         | `-s`  | `flag` | `False`                 | If provided, enables salting of hashes for extra security.                                                             |
 | `--output`       | `-o`  | `str`  | `./output`              | Directory path for saving processed output files.                                                                      |
+
 ### Example Commands
 
 #### 1) Basic example
+```
 python script.py -i ./data/tweets.txt -et url,Hashtags
+```
 
 #### 2) Using a custom regex dictionary
+```
 python script.py -i ./data/posts.txt -r ./config/custom_regex.json -et Mentions,IBAN
+```
 
 #### 3) Different hash function + salt, custom output dir
-´´´
+```
 python script.py -i ./data/sample.txt -hf sha256 -s -o ./cleaned_output
-´´´
+```
 
 ## Contact
 

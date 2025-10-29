@@ -60,6 +60,15 @@ Install dependencies, using
 
 The method offers a CLI-tool that makes it easy to run and adapt the code to your current needs.
 
+| Argument | Short | Type | Default | Description |
+|-----------|--------|-------|----------|--------------|
+| `--input_data` | `-i` | `str` | `./data/input_data.txt` | Path to input file or directory to process. |
+| `--regex_dict` | `-r` | `str` | `None` | Path to a JSON file containing custom regex patterns. If not provided, defaults to built-in `entity_regex` dictionary. |
+| `--entity&#8209;types` | `-et` | `str` | `"url"` | Comma-separated list of entity types to anonymize (e.g. `IBAN,Hashtags`). |
+| `--hash_func` | `-hf` | `str` | `"md5"` | Hashing algorithm to use (`md5`, `sha256`, etc.). |
+| `--salt` | `-s` | `flag` | `False` | If provided, enables salting of hashes for extra security. |
+| `--output` | `-o` | `str` | `./output` | Directory path for saving processed output files. |
+
 
 | Argument           | Short | Type   | Default                 | Description                                                                                                            |
 | ------------------ | ----- | ------ | ----------------------- | -------------------------------------------------------------------------- |
@@ -72,12 +81,12 @@ The method offers a CLI-tool that makes it easy to run and adapt the code to you
 
 ### Example Commands
 
-#### 1) Basic example
+#### 1) Anonymize url and Hashtags in tweets.txt file
 ```
 python script.py -i ./data/tweets.txt -et url,Hashtags
 ```
 
-#### 2) Using a custom regex dictionary
+#### 2) Using a custom regex dictionary that contain Mentions and IBAN regex
 ```
 python script.py -i ./data/posts.txt -r ./config/custom_regex.json -et Mentions,IBAN
 ```

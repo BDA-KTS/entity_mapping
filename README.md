@@ -73,17 +73,17 @@ The method offers a CLI-tool that makes it easy to run and adapt the code to you
 
 #### 1) Anonymize url and Hashtags in tweets.txt file
 ```
-python script.py -i ./data/tweets.txt -et url,Hashtags
+python hash_entity.py -i ./data/tweets.txt -et url,Hashtags
 ```
 
 #### 2) Using a custom regex dictionary that contain Mentions and IBAN regex
 ```
-python script.py -i ./data/posts.txt -r ./config/custom_regex.json -et Mentions,IBAN
+python hash_entity.py -i ./data/posts.txt -r ./config/custom_regex.json -et Mentions,IBAN
 ```
 
 #### 3) Different hash function + salt, custom output dir
 ```
-python script.py -i ./data/sample.txt -hf sha256 -s -o ./cleaned_output
+python hash_entity.py -i ./data/sample.txt -hf sha256 -s -o ./cleaned_output
 ```
 
 ## Contact

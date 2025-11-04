@@ -1,19 +1,13 @@
-# Entity Mapping
+# (Entities) Pseudo Anonymization
 
 ## Description
-The entity mapping method anonymizes privacy relevant information found in texts.
-For this the method uses Regular Expressions (RegEx) that match patterns such as URLs, hashtags, IBANs, and more. 
-Each recognized pattern is hashed with a configurable hashing function.
-A hashing function is an algorithm that can map any input to an unique irreversible hash-value.
-This makes them great for anonymization as they also preserve referential integrity i.e., the same entity will always map to the same hash. 
+The pseudo anonymization method helps to anonymize different types of entities that may have privacy risks e.g., user mentions, or security risks e.g., URLs or identity risks e.g., hashtags.
+For this, the method uses Regular Expressions (RegEx) that match patterns such as URLs, hashtags, IBANs, and more. 
+Each recognized pattern is hashed with a configurable hashing function (A hashing function is an algorithm that can map any input to an unique irreversible hash-value). It offers a nice mechanism to anonymize sensitive information while preserving their referential integrity i.e., the same entity will always map to the same hash. 
 
-This method will scan the input data for predefined patterns relevant for anonmyzation.
-After recognition the method can add the current timestamp as 'salt' to each pattern.
-Adding 'salt' increases the security of the anonymization against online available lookup tables.
-Then it will transform all recognized and 'salted' patterns with the chosen hashing function.
-Lastly, all occurring patterns are replaced with their corresponding hash-value.
+The method scans the input data for predefined patterns relevant for anonmyzation. For the matched patterns that are found in the input text, the method uses current timestamp as 'salt' for each pattern, which increases the security of the anonymization against online available lookup tables. Finally, the matched and salted patterns are hashed using md5 hash function and are replaced with their hashed values.
 This approach allows researchers to maintain the semantic and relational structure of the data (e.g., user mentions, domain references, or recurring tags) without exposing sensitive or personally identifiable information. 
-Therefore, hashing-based mapping mechanism are particularly useful in privacy-preserving computational social science studies.
+Therefore, hashing-based anonymization mechanisms are particularly useful in privacy-preserving computational social science studies.
 
 ## Use Cases
 

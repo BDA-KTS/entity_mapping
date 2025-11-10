@@ -122,6 +122,8 @@ def hash_entity(input_data,
                     hashed_entities.append("url:" + res + "\tdomain:" + net_loc)  
                 # for other entities (non URL)
                 else:
+                    if salt:
+                        entity += salt
                     hash_entity = hash_fn(entity.encode()).hexdigest()
                     input_with_hashed_entities.append(post.replace(entity, f"<hashed_{entity_type}>{hash_entity}</hashed_{entity_type}>"))
                     hashed_entities.append(hash_entity)  
